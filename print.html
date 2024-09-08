@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html lang="jp" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>rade package manager document</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> comrade package manager</a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> rade update</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> rade upgrade</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> rade install</a></li><li class="chapter-item expanded "><a href="chapter_5.html"><strong aria-hidden="true">5.</strong> rade list</a></li><li class="chapter-item expanded "><a href="chapter_6.html"><strong aria-hidden="true">6.</strong> end</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rade package manager document</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="comrade-package-manager"><a class="header" href="#comrade-package-manager">comrade package manager</a></h1>
+<p>This document is intended for developers of the comrade package manager.</p>
+<p>This document explains the detailed mechanisms of the comrade package manager.</p>
+<p>For information on how to contribute, please refer to the following Markdown: <a href="https://github.com/rade-package-manager/rade-package-manager/blob/stable/CONTRIBUTING.md">CONTRIBUTING.md</a>
+<br>
+This document is structured as follows:
+<br>
+Chapter-2: How 'rade update' works
+<br>
+Chapter-3: How 'rade upgrade' works
+<br>
+Chapter-4: How 'rade install' works
+<br>
+Chapter-5: How 'rade list' works</p>
+<p>If you can immediately understand what you want to do by looking at the source code, this document may not be necessary for you.</p>
+<p>However, such individuals are rare. At least, I cannot do that.</p>
+<p>This document exists for those who cannot understand even when looking at the source code.</p>
+<p>Well, the introduction has been quite long, but let's move on to the next part.
+The next chapter is about how 'rade update' works.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rade-update"><a class="header" href="#rade-update">rade update</a></h1>
+<p><code>rade update</code> updates the package list for comrade.</p>
+<p>The comrade package list is located in ~/.comrade/packagelist/.</p>
+<p>When you execute update, comrade first deletes the packagelist and then clones the <a href="https://github.com/rade-package-manager/rade-package-list">comrade package list</a>. This ensures that the packagelist is completely up to date.</p>
+<p>If ~/.comrade/packagelist/ is not found, it simply clones the packagelist and updates it to the latest version.</p>
+<h3 id="if-the-packagelist-update-fails"><a class="header" href="#if-the-packagelist-update-fails">If the packagelist update fails</a></h3>
+<p>If comrade fails to clone the packagelist, it will output an error message and stop operation.
+<img src="../Failed-clone-packagelist.png" alt="Error message when cloning fails" />
+(This error message occurred due to lack of internet connection.)</p>
+<h3 id="package-contents"><a class="header" href="#package-contents">Package contents</a></h3>
+<p>The contents of a package are as follows:</p>
+<pre><code class="language-sh">❯ tree hello_knife/
+hello_knife/
+├── capacity
+├── dependencies
+├── language
+├── repository
+└── version
+
+1 directory, 5 files
+</code></pre>
+<p>(We used the hello_knife package as an example)</p>
+<p>Let's look at each of these:</p>
+<ul>
+<li>
+<p><strong>capacity</strong>
+This file indicates the capacity of the package.
+comrade checks this file during installation to display the capacity.</p>
+</li>
+<li>
+<p><strong>dependencies</strong>
+This file shows the package dependencies.
+During installation, it checks this file to confirm dependencies.
+(However, the current version of comrade doesn't have dependency resolution functionality...)</p>
+</li>
+<li>
+<p><strong>language</strong>
+This file contains the programming language used by the package.
+In the case of hello_knife, since it uses C language, the content of this file is <code>C</code>.</p>
+</li>
+<li>
+<p><strong>repository</strong>
+This file contains the repository URL of the package.
+During installation, comrade checks this file and clones the target repository.</p>
+</li>
+<li>
+<p><strong>version</strong>
+This file contains the version of the package.
+comrade checks and outputs this file during installation.</p>
+</li>
+</ul>
+<h3 id="if-you-want-to-create-a-new-package"><a class="header" href="#if-you-want-to-create-a-new-package">If you want to create a new package</a></h3>
+<p>There's an executable shell script called create_package.bash in <a href="https://github.com/rade-package-manager/rade-package-list">rade-package-list</a>.
+By executing this shell script, you can easily add a package.</p>
+<p>Example (if the package to be added is "test-package"):</p>
+<pre><code class="language-bash">./create_package.bash test-package None rust https://github.com/test-package/rade-test-package 100 v1.0
+</code></pre>
+<p>Let's look at what each of these means:</p>
+<ul>
+<li>
+<p><strong>test-package</strong>
+This is the package name.
+A package (directory) with this name will be generated.</p>
+</li>
+<li>
+<p><strong>None</strong>
+This represents dependencies.
+If there are no dependencies, you can use None or leave it blank.</p>
+</li>
+<li>
+<p><strong>rust</strong>
+This is the programming language used in this package.
+In this case, we assume test-package uses Rust, so 'rust' is written here.
+(Please use lowercase for language names)</p>
+</li>
+<li>
+<p><strong>https://github.com/test-package/rade-test-package</strong>
+This is the repository URL. This repository will be cloned and installed.</p>
+</li>
+<li>
+<p><strong>100</strong>
+This is the capacity used by the package program.
+We set it to 100 in this case.
+(Note that comrade's capacity notation is in bytes. So inputting 100 means the program is 100 bytes)</p>
+</li>
+<li>
+<p><strong>v1.0</strong>
+This is the program version. This version will be output during installation.
+In this case, we set it as version 1.0.</p>
+</li>
+</ul>
+<p>This concludes this chapter.
+The next chapter will explain rade upgrade.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rade-upgrade"><a class="header" href="#rade-upgrade">rade upgrade</a></h1>
+<p>We'll abbreviate comrade as rade.</p>
+<p><code>rade upgrade</code> keeps rade itself up to date.
+When you execute this, rade rebuilds itself and is reborn as a new rade.
+Let's take a look at what happens during the upgrade process.</p>
+<p>Let's assume you've entered <code>rade upgrade</code>.
+Then, rade goes to check what its latest version is.
+If the latest version of rade is the same as the current version, rade does nothing and displays to the user, "rade is already up to date".
+What if the latest version of rade is higher than the current version?
+In that case, rade upgrades itself.
+Let's look at the upgrade process.</p>
+<p>First, if a build directory exists, rade deletes it.
+Once the build directory is deleted or if it didn't exist, rade clones <a href="https://github.com/rade-package-manager/rade-package-manager">itself</a> into the build directory.
+Next, rade updates the packagelist. This is to keep rade completely up to date during the upgrade.
+After the package list update is complete, rade uses make to build itself.
+This ensures that rade can work in any environment.
+When make finishes and everything completes normally, the upgrade is successfully finished.
+This is how rade achieves its upgrade.</p>
+<p>This concludes this chapter. Next is the explanation of <code>rade install</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rade-install"><a class="header" href="#rade-install">rade install <package></a></h1>
+<p>The install function is an essential feature for a package manager.
+During installation, rade retrieves information about dependencies, capacity, language used, etc.
+Let's see what rade does when you enter <code>rade install hello_knife</code>.</p>
+<h2 id="checking-if-the-package-exists"><a class="header" href="#checking-if-the-package-exists">Checking if the package exists</a></h2>
+<p>It checks if the package to be installed exists (in this case, checking if hello_knife exists).
+It checks all directories in the packagelist, and if a directory named hello_knife exists, it continues with the installation. If it doesn't exist, it outputs a message saying "No such package exists".</p>
+<h2 id="if-it-exists"><a class="header" href="#if-it-exists">If it exists</a></h2>
+<p>If it exists, rade reads the following files in the package directory:
+dependencies file, language file, repository file, capacity file, and version file.</p>
+<p>Then, rade reads the repository URL in the repository file and clones that repository.</p>
+<h2 id="if-cloning-is-successful"><a class="header" href="#if-cloning-is-successful">If cloning is successful</a></h2>
+<p>When rade successfully clones, it searches for a directory named .comrade in that repository.
+If a .comrade directory exists, rade reads a file called exec_name inside the .comrade directory.
+This file contains the name of the executable file after compiling the repository.
+After reading this file, rade executes install.sh in that repository.
+If .comrade doesn't exist, rade assumes the executable file name is the repository name and executes install.sh.
+install.sh is a shell script that describes how to compile the repository and is essential for rade's program installation.</p>
+<h2 id="compiling-the-program"><a class="header" href="#compiling-the-program">Compiling the program</a></h2>
+<p>rade executes install.sh for compilation.
+If install.sh terminates abnormally, rade stops execution and outputs an error message.
+There's one package where you can experience this abnormal termination.
+It's the <code>build_error</code> package.
+If you try to install the build_error package, it intentionally causes a compilation error, stops the build, and even stops rade. Feel free to try installing it if you're interested.
+(There's a rumor that something interesting happens if you fix it...)
+Back to the main topic.</p>
+<p>When the build completes successfully, rade searches for the executable file.
+If the executable file exists, rade moves the program to ~/.comrade/bin/, writes logs, and successfully completes the installation.
+If the program doesn't exist, rade throws an error and terminates abnormally.
+(The process when the program doesn't exist is handled by .expect())
+When the installation is complete, rade deletes the build directory and prepares for the next installation.</p>
+<p>Here's the rade log when installing the hello_knife package:</p>
+<pre><code class="language-bash">❯ rade install hello_knife
+&gt;&gt;&gt; removing build directory... # Remove the build directory if it exists
+&gt;&gt;&gt; Clone package... # Since a package named hello_knife was found, read the repository file and clone it
+install package: hello_knife
+executable file name: hello # Since the .comrade directory existed, read and output exec_name in that directory
+capacity: bytes # Read and output the capacity file. (Note: hello_knife's capacity file is empty, so it only displays bytes)
+language: C # hello_knife is written in C language, so it displays C
+versions: v1.0 # Output hello_knife's version
+dependencies: None # hello_knife has no dependencies, so it displays None
+repository: https://github.com/knife-package-manager/hello_knife # hello_knife's repository URL
+
+install hello_knife?
+[y/n] y
+&gt;&gt;&gt; Start Installation
+&gt;&gt;&gt; run install.sh (build start) # Execute install.sh and start the build
+&gt;&gt;&gt; build end # install.sh terminated normally
+&gt;&gt;&gt; moving file... # Move the executable file to ~/.comrade/bin/ to make it executable
+&gt;&gt;&gt; remove build directory... # Delete the build directory
+&gt;&gt;&gt; Fill in the log... # Write the installed items to the log
+/home/inado/.comrade/log/install/hello_knife
+All done! # Installation completed normally, notifying that everything is done
+Installation is complete
+For more information on hello_knife, please see https://github.com/knife-package-manager/hello_knife.
+</code></pre>
+<p>This concludes this chapter. Next is the explanation of the list function.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rade-list"><a class="header" href="#rade-list">rade list</a></h1>
+<p>rade list outputs a list of packages that can be installed.
+Also, by adding the -i option to list, it displays the packages that are installed.</p>
+<p>Example: rade list</p>
+<pre><code class="language-bash">❯ rade list
+hello_knife
+pravda
+kajisp
+noze
+endolphine
+build_error
+stack-lang
+scriptS
+</code></pre>
+<p>These are the list of packages that can currently be installed (as of September 2024).</p>
+<p><code>rade list -i</code>:</p>
+<pre><code class="language-bash">❯ rade list -i
+pravda
+rade
+hello
+</code></pre>
+<p>These are the packages I have installed.</p>
+<h2 id="whats-happening"><a class="header" href="#whats-happening">What's happening</a></h2>
+<p>What happens during rade list is that it reads the packagelist directory,
+and if a directory exists, it outputs the name of that directory.</p>
+<p>When the -i option is executed, it simply reads the contents of ~/.comrade/bin/ and outputs its contents.</p>
+<p>This concludes this chapter.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="end"><a class="header" href="#end">end</a></h1>
+<p>This concludes this document.
+It wasn't very long, but we greatly appreciate you reading it.
+If after reading this, you feel like you want to contribute to rade, we would be delighted if you could join our <a href="https://discord.com/invite/QUhr9wSxWr">Discord server</a>.
+Well then, let's meet again someday.</p>
+<p><a href="https://github.com/rade-package-manager/rade-package-manager/">comrade package manager</a> | <a href="https://discord.com/invite/QUhr9wSxWr">discord server</a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

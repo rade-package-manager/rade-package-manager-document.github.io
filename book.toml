@@ -1,0 +1,6 @@
+[book]
+title = "rade package manager document"
+authors = ["17do"]
+language = "jp"
+multilingual = false
+src = "src"
